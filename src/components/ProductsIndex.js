@@ -1,0 +1,108 @@
+import React, {Component} from 'react';
+import '../App.css';
+import {Link} from 'react-router-dom';
+import axios from 'axios';
+import {Button, ControlLabel, Form, FormControl, FormGroup, Table} from 'react-bootstrap';
+
+class ProductsIndex extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            products: [], product: {id: '', title: '', image: '', price: '', introduction: ''}, token: ''
+        };
+
+        this.onChangeTitle = this.onChangeTitle.bind(this);
+        this.onProductSearch = this.onProductSearch.bind(this);
+        this.onChangeToken = this.onChangeToken.bind(this);
+    }
+
+    onChangeTitle(e) {
+        this.setState({product: {title: e.target.value}})
+    }
+
+    onChangeToken(e) {
+        this.setState({token: e.target.value})
+    }
+
+    onProductSearch(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const instance = axios.create({
+            headers: {'token': this.state.token}
+        });
+
+        let params = new URLSearchParams();
+        params.append('title', this.state.product.title);
+
+        instance
+            .post("http://localhost:9000/search/products", params)
+            .then(results => {
+                const data = results.data;
+                this.setState({
+                    products: data.products
+                })
+            })
+            .catch(error => {
+                console.log('** error **', error)
+            })
+    }
+
+    productList() {
+        return this.state.products.map(
+            (product, i) =>
+                <tr key={i}>
+                    <td>{product.title}</td>
+                    <td>{product.image}</td>
+                    <td>{product.price}</td>
+                    <td>{product.introduction}</td>
+                    <td><Link to={`/products/update/${product.id}`}>更新</Link><Link
+                        to={`/products/delete/${product.id}`}>削除</Link></td>
+                </tr>
+        )
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <div className="title">商品の作成・検索・更新・削除機能を持ったSPA</div>
+                <Form inline onSubmit={this.onProductSearch}>
+                    <FormGroup className="formGroup" controlId="formControlsTitle">
+                        <ControlLabel className="controlLabel">検索したい商品名</ControlLabel>
+                        <FormControl
+                            name="title"
+                            type="text"
+                            value={this.state.title}
+                            onChange={(event) => this.onChangeTitle(event)}
+                        />
+                    </FormGroup>
+                    <FormGroup className="formGroup">
+                        <ControlLabel className="controlLabel">トークン</ControlLabel>
+                        <FormControl
+                            value={this.state.token}
+                            onChange={(event) => this.onChangeToken(event)}
+                        />
+                    </FormGroup>
+                    <Button className="button" type="submit">商品を検索する</Button>
+                </Form>
+                <Table responsive>
+                    <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>画像</th>
+                        <th>価格</th>
+                        <th>紹介文</th>
+                        <th>処理</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.productList()}
+                    </tbody>
+                </Table>
+                <Button><Link to="/products/new">商品を登録する</Link></Button>
+            </React.Fragment>
+        );
+    }
+}
+
+export default ProductsIndex;
