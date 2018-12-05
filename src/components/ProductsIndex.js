@@ -2,26 +2,24 @@ import React, {Component} from 'react';
 import '../App.css';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import {withCookies} from 'react-cookie'
 import {Button, ControlLabel, Form, FormControl, FormGroup, Table} from 'react-bootstrap';
 
 class ProductsIndex extends Component {
     constructor(props) {
         super(props)
+
+        const {cookies} = props;
         this.state = {
-            products: [], product: {id: '', title: '', image: '', price: '', introduction: ''}, token: ''
+            products: [], product: {id: '', title: '', image: '', price: '', introduction: ''}, token: cookies.get('token')
         };
 
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onProductSearch = this.onProductSearch.bind(this);
-        this.onChangeToken = this.onChangeToken.bind(this);
     }
 
     onChangeTitle(e) {
         this.setState({product: {title: e.target.value}})
-    }
-
-    onChangeToken(e) {
-        this.setState({token: e.target.value})
     }
 
     onProductSearch(e) {
@@ -66,7 +64,7 @@ class ProductsIndex extends Component {
         return (
             <React.Fragment>
                 <div className="title">商品の作成・検索・更新・削除機能を持ったSPA</div>
-                <Form inline onSubmit={this.onProductSearch}>
+                <Form onSubmit={this.onProductSearch}>
                     <FormGroup className="formGroup" controlId="formControlsTitle">
                         <ControlLabel className="controlLabel">検索したい商品名</ControlLabel>
                         <FormControl
@@ -74,13 +72,6 @@ class ProductsIndex extends Component {
                             type="text"
                             value={this.state.title}
                             onChange={(event) => this.onChangeTitle(event)}
-                        />
-                    </FormGroup>
-                    <FormGroup className="formGroup">
-                        <ControlLabel className="controlLabel">トークン</ControlLabel>
-                        <FormControl
-                            value={this.state.token}
-                            onChange={(event) => this.onChangeToken(event)}
                         />
                     </FormGroup>
                     <Button className="button" type="submit">商品を検索する</Button>
@@ -99,10 +90,10 @@ class ProductsIndex extends Component {
                     {this.productList()}
                     </tbody>
                 </Table>
-                <Button><Link to="/products/new">商品を登録する</Link></Button>
+                <Button><Link to={{pathname: "/products/new", state: {ProductsIndex: true}}}>商品を登録する</Link></Button>
             </React.Fragment>
         );
     }
 }
 
-export default ProductsIndex;
+export default withCookies(ProductsIndex);

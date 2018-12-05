@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import '../App.css';
-import {Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
+import {withCookies} from 'react-cookie'
 
 
 class ProductDelete extends Component {
@@ -9,13 +10,8 @@ class ProductDelete extends Component {
         super(props);
 
         const {id} = props.match.params;
-        this.state = {id: id, token: ""};
-
-        this.onChangeToken = this.onChangeToken.bind(this);
-    }
-
-    onChangeToken(e) {
-        this.setState({token: e.target.value})
+        const {cookies} = props;
+        this.state = {id: id, token: cookies.get('token')};
     }
 
     onProductDelete(e) {
@@ -40,19 +36,10 @@ class ProductDelete extends Component {
         return (
             <React.Fragment>
                 <div>削除しますか？</div>
-                <form>
-                    <FormGroup>
-                        <ControlLabel>トークン</ControlLabel>
-                        <FormControl
-                            value={this.state.token}
-                            onChange={(event) => this.onChangeToken(event)}
-                        />
-                    </FormGroup>
-                </form>
                 <Button onClick={(event) => this.onProductDelete(event)}>削除</Button>
             </React.Fragment>
         )
     }
 }
 
-export default ProductDelete
+export default withCookies(ProductDelete)

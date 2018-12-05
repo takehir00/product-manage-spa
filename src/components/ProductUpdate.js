@@ -1,20 +1,21 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import {Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
+import {withCookies} from 'react-cookie'
 
 class ProductUpdate extends Component {
     constructor(props) {
         super(props);
         const {id} = props.match.params;
+        const {cookies} = props;
 
-        this.state = {id: id, title: "", image: "", price: "", introduction: "", token: ""};
+        this.state = {id: id, title: "", image: "", price: "", introduction: "", token: cookies.get('token')};
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeImage = this.onChangeImage.bind(this);
         this.onChangePrice = this.onChangePrice.bind(this);
         this.onChangeIntroduction = this.onChangeIntroduction.bind(this);
-        this.onChangeToken = this.onChangeToken.bind(this);
     }
 
     componentWillMount() {
@@ -51,10 +52,6 @@ class ProductUpdate extends Component {
         this.setState({introduction: e.target.value});
     }
 
-    onChangeToken(e) {
-        this.setState({token: e.target.value})
-    }
-
     handleSubmit(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -68,14 +65,7 @@ class ProductUpdate extends Component {
         params.append('image', this.state.image);
         params.append('price', this.state.price);
         params.append('introduction', this.state.introduction);
-        // console.log(this.state.id) id取れてる
 
-        const product = {
-            title: this.state.title,
-            image: this.state.image,
-            price: this.state.price,
-            introduction: this.state.introduction
-        }
         const formdata = new FormData();
         formdata.append("title", this.state.title);
         formdata.append("image", this.state.image);
@@ -84,9 +74,8 @@ class ProductUpdate extends Component {
 
         instance
             .put(`http://localhost:9000/products/${this.state.id}`, params)
-            // .put(`http://localhost:9000/products/${this.state.id}`, params)
             .then(results => {
-                this.props.history.push('/')
+                this.props.history.push('/products')
             })
             .catch(error => {
                 console.log('** error **', error)
@@ -131,13 +120,6 @@ class ProductUpdate extends Component {
                             onChange={(event) => this.onChangeIntroduction(event)}
                         />
                     </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>トークン</ControlLabel>
-                        <FormControl
-                            value={this.state.token}
-                            onChange={(event) => this.onChangeToken(event)}
-                        />
-                    </FormGroup>
                     <Button type="submit">Submit</Button>
                 </form>
             </React.Fragment>
@@ -145,4 +127,4 @@ class ProductUpdate extends Component {
     }
 }
 
-export default ProductUpdate
+export default withCookies(ProductUpdate)

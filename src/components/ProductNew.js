@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import {Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
+import {withCookies,Cookies} from 'react-cookie'
 
 class ProductNew extends Component {
     constructor(props) {
         super(props);
-        this.state = {title: '', image: '', price: '', introduction: '', token: ''};
+
+        const {cookies} = props;
+        this.state = {title: '', image: '', price: '', introduction: '', token: cookies.get('token')};
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -52,7 +55,7 @@ class ProductNew extends Component {
         instance
             .post("http://localhost:9000/products", params)
             .then(results => {
-                this.props.history.push('/')
+                this.props.history.push('/products')
             })
             .catch(error => {
                 console.log('** error **', error)
@@ -97,13 +100,6 @@ class ProductNew extends Component {
                             onChange={(event) => this.onChangeIntroduction(event)}
                         />
                     </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>トークン</ControlLabel>
-                        <FormControl
-                            value={this.state.token}
-                            onChange={(event) => this.onChangeToken(event)}
-                        />
-                    </FormGroup>
                     <Button type="submit">Submit</Button>
                 </form>
             </React.Fragment>
@@ -111,5 +107,5 @@ class ProductNew extends Component {
     }
 }
 
-export default ProductNew;
+export default withCookies(ProductNew);
 
