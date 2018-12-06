@@ -46,9 +46,9 @@ class ProductDelete extends Component {
         });
 
         instance
-            .delete(`http://localhost:9000/products/${this.state.id}`)
+            .delete(`${process.env.REACT_APP_API_URL}/products/${this.state.id}`)
             .then(results => {
-                this.props.history.push('/')
+                this.props.history.push('/products')
             })
             .catch(error => {
                 this.openModal();

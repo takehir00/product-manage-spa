@@ -34,7 +34,7 @@ class ProductUpdate extends Component {
 
     componentWillMount() {
         axios
-            .get(`http://localhost:9000/products/${this.state.id}`)
+            .get(`${process.env.REACT_APP_API_URL}/products/${this.state.id}`)
             .then(results => {
                 const data = results.data.product;
                 this.setState({
@@ -96,7 +96,7 @@ class ProductUpdate extends Component {
         formdata.append("introduction", this.state.introduction);
 
         instance
-            .put(`http://localhost:9000/products/${this.state.id}`, params)
+            .put(`${process.env.REACT_APP_API_URL}/products/${this.state.id}`, params)
             .then(results => {
                 this.props.history.push('/products')
             })

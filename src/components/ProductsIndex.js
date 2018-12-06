@@ -56,7 +56,7 @@ class ProductsIndex extends Component {
         params.append('title', this.state.product.title);
 
         instance
-            .post("http://localhost:9000/search/products", params)
+            .post(`${process.env.REACT_APP_API_URL}/search/products`, params)
             .then(results => {
                 const data = results.data;
                 this.setState({

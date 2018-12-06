@@ -11,6 +11,7 @@ import * as serviceWorker from './serviceWorker';
 import ProductUpdate from "./components/ProductUpdate";
 import ProductDelete from "./components/ProductDelete";
 
+require('dotenv').config();
 
 ReactDOM.render(
     <CookiesProvider>

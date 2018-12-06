@@ -75,7 +75,7 @@ class ProductNew extends Component {
         params.append('introduction', this.state.introduction);
 
         instance
-            .post("http://localhost:9000/products", params)
+            .post(`${process.env.REACT_APP_API_URL}/products`, params)
             .then(results => {
                 this.props.history.push('/products')
             })
