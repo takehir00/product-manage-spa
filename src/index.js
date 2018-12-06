@@ -16,17 +16,17 @@ Modal.setAppElement(document.getElementById('root'));
 require('dotenv').config();
 
 ReactDOM.render(
-    <CookiesProvider>
-        <BrowserRouter>
-            <Switch>
-                <Route exact path="/" render={(props) => <TokenForm {...props}/>}/>
-                <Route exact path="/products" render={(props) => <ProductsIndex {...props}/>}/>
-                <Route exact path="/products/new" render={(props) => <ProductNew {...props}/>}/>
-                <Route exact path="/products/update/:id" render={(props) => <ProductUpdate {...props}/>}/>
-                <Route exact path="/products/delete/:id" render={(props) => <ProductDelete {...props}/>}/>
-            </Switch>
-        </BrowserRouter>
-    </CookiesProvider>,
+        <CookiesProvider>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/" render={(props) => <TokenForm {...props}/>}/>
+                    <Route exact path="/products" render={(props) => <ProductsIndex {...props}/>}/>
+                    <Route exact path="/products/new" render={(props) => <ProductNew {...props}/>}/>
+                    <Route exact path="/products/update/:id" render={(props) => <ProductUpdate {...props}/>}/>
+                    <Route exact path="/products/delete/:id" render={(props) => <ProductDelete {...props}/>}/>
+                </Switch>
+            </BrowserRouter>
+        </CookiesProvider>,
     document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
