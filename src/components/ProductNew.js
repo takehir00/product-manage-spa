@@ -1,21 +1,43 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import {Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
-import {withCookies,Cookies} from 'react-cookie'
+import {withCookies} from 'react-cookie'
+import Modal from 'react-modal';
+
+const customStyles = {
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)'
+    }
+};
 
 class ProductNew extends Component {
     constructor(props) {
         super(props);
 
         const {cookies} = props;
-        this.state = {title: '', image: '', price: '', introduction: '', token: cookies.get('token')};
+        this.state = {title: '', image: '', price: '', introduction: '', token: cookies.get('token'), modalIsOpen: false};
 
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeImage = this.onChangeImage.bind(this);
         this.onChangePrice = this.onChangePrice.bind(this);
         this.onChangeIntroduction = this.onChangeIntroduction.bind(this);
         this.onChangeToken = this.onChangeToken.bind(this);
+    }
+
+    openModal() {
+        this.setState({modalIsOpen: true});
+    }
+
+    closeModal() {
+        this.setState({modalIsOpen: false});
     }
 
     onChangeTitle(e) {
@@ -58,6 +80,7 @@ class ProductNew extends Component {
                 this.props.history.push('/products')
             })
             .catch(error => {
+                this.openModal();
                 console.log('** error **', error)
             });
     }
@@ -66,6 +89,15 @@ class ProductNew extends Component {
     render() {
         return (
             <React.Fragment>
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                    contentLabel="Error Modal"
+                >
+                    <h1>サーバーで何らかのエラーが発生しています</h1>
+                    <button onClick={this.closeModal}>close</button>
+                </Modal>
                 <div>商品作成フォーム</div>
                 <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="formControlsTitle">

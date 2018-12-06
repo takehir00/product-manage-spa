@@ -4,6 +4,18 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {withCookies} from 'react-cookie'
 import {Button, ControlLabel, Form, FormControl, FormGroup, Table} from 'react-bootstrap';
+import Modal from 'react-modal';
+
+const customStyles = {
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)'
+    }
+};
 
 class ProductsIndex extends Component {
     constructor(props) {
@@ -11,11 +23,21 @@ class ProductsIndex extends Component {
 
         const {cookies} = props;
         this.state = {
-            products: [], product: {id: '', title: '', image: '', price: '', introduction: ''}, token: cookies.get('token')
+            products: [], product: {id: '', title: '', image: '', price: '', introduction: ''}, token: cookies.get('token'), modalIsOpen: false
         };
 
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onProductSearch = this.onProductSearch.bind(this);
+    }
+
+    openModal() {
+        this.setState({modalIsOpen: true});
+    }
+
+    closeModal() {
+        this.setState({modalIsOpen: false});
     }
 
     onChangeTitle(e) {
@@ -42,6 +64,7 @@ class ProductsIndex extends Component {
                 })
             })
             .catch(error => {
+                this.openModal();
                 console.log('** error **', error)
             })
     }
@@ -63,6 +86,15 @@ class ProductsIndex extends Component {
     render() {
         return (
             <React.Fragment>
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                    contentLabel="Error Modal"
+                >
+                    <h1>サーバーで何らかのエラーが発生しています</h1>
+                    <button onClick={this.closeModal}>close</button>
+                </Modal>
                 <div className="title">商品の作成・検索・更新・削除機能を持ったSPA</div>
                 <Form onSubmit={this.onProductSearch}>
                     <FormGroup className="formGroup" controlId="formControlsTitle">
