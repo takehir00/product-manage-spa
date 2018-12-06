@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import {CookiesProvider} from 'react-cookie';
+import Modal from 'react-modal';
 
 import './index.css';
 import TokenForm from './components/TokenForm';
@@ -11,6 +12,7 @@ import * as serviceWorker from './serviceWorker';
 import ProductUpdate from "./components/ProductUpdate";
 import ProductDelete from "./components/ProductDelete";
 
+Modal.setAppElement(document.getElementById('root'));
 require('dotenv').config();
 
 ReactDOM.render(
