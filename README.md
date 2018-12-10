@@ -29,15 +29,15 @@ $ brew install node
 ```
 ####yarnのインストール
 ````
-npm install --global yarn
+$ npm install --global yarn
 ````
 ####リポジトリのクローン
 ```
-git clone git@bitbucket.org:teamlabengineering/okuyama-react-front.git
+$ git clone git@bitbucket.org:teamlabengineering/okuyama-react-front.git
 ```
 ####http://localhost:3000/ で起動
 ````
-yarn run start
+$ yarn run start
 ````
 
 ####コンポーネントの親子関係
