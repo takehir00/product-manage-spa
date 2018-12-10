@@ -23,11 +23,12 @@ class ProductsIndex extends Component {
 
         const {cookies} = props;
         this.state = {
-            products: [], product: {id: '', title: '', image: '', price: '', introduction: ''}, token: cookies.get('token'), modalIsOpen: false
+            products: [], product: {id: '', title: '', image: '', price: '', introduction: ''}, token: cookies.get('token'), modalIsOpen: false, errorMessage: ''
         };
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.setErrorMessage = this.setErrorMessage.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onProductSearch = this.onProductSearch.bind(this);
     }
@@ -38,6 +39,10 @@ class ProductsIndex extends Component {
 
     closeModal() {
         this.setState({modalIsOpen: false});
+    }
+
+    setErrorMessage(error) {
+        this.setState({errorMessage: error})
     }
 
     onChangeTitle(e) {
@@ -65,7 +70,7 @@ class ProductsIndex extends Component {
             })
             .catch(error => {
                 this.openModal();
-                console.log('** error **', error)
+                this.setErrorMessage(error.message);
             })
     }
 
@@ -92,7 +97,7 @@ class ProductsIndex extends Component {
                     style={customStyles}
                     contentLabel="Error Modal"
                 >
-                    <h1>サーバーで何らかのエラーが発生しています</h1>
+                    <h1>{this.state.errorMessage}</h1>
                     <button onClick={this.closeModal}>close</button>
                 </Modal>
                 <div className="title">商品の作成・検索・更新・削除機能を持ったSPA</div>

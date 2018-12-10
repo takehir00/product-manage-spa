@@ -25,6 +25,7 @@ class ProductUpdate extends Component {
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.setErrorMessage = this.setErrorMessage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeImage = this.onChangeImage.bind(this);
@@ -57,6 +58,10 @@ class ProductUpdate extends Component {
 
     closeModal() {
         this.setState({modalIsOpen: false});
+    }
+
+    setErrorMessage(error) {
+        this.setState({errorMessage: error})
     }
 
     onChangeTitle(e) {
@@ -102,7 +107,7 @@ class ProductUpdate extends Component {
             })
             .catch(error => {
                 this.openModal();
-                console.log('** error **', error)
+                this.setErrorMessage(error.message);
             })
     }
 
@@ -116,7 +121,7 @@ class ProductUpdate extends Component {
                     style={customStyles}
                     contentLabel="Error Modal"
                 >
-                    <h1>サーバーで何らかのエラーが発生しています</h1>
+                    <h1>{this.state.errorMessage}</h1>
                     <button onClick={this.closeModal}>close</button>
                 </Modal>
                 <div>商品更新フォーム</div>

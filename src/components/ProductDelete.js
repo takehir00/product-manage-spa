@@ -23,10 +23,11 @@ class ProductDelete extends Component {
 
         const {id} = props.match.params;
         const {cookies} = props;
-        this.state = {id: id, token: cookies.get('token'), modalIsOpen: false};
+        this.state = {id: id, token: cookies.get('token'), modalIsOpen: false, errorMessage: ''};
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.setErrorMessage = this.setErrorMessage.bind(this);
     }
 
     openModal() {
@@ -35,6 +36,10 @@ class ProductDelete extends Component {
 
     closeModal() {
         this.setState({modalIsOpen: false});
+    }
+
+    setErrorMessage(error) {
+        this.setState({errorMessage: error})
     }
 
     onProductDelete(e) {
@@ -65,7 +70,7 @@ class ProductDelete extends Component {
                     style={customStyles}
                     contentLabel="Error Modal"
                 >
-                <h1>サーバーで何らかのエラーが発生しています</h1>
+                <h1>{this.state.errorMessage}</h1>
                 <button onClick={this.closeModal}>close</button>
                 </Modal>
                 <div>削除しますか？</div>
