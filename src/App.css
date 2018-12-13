@@ -30,3 +30,21 @@
     transform: rotate(360deg);
   }
 }
+
+.title {
+  margin: 20px 10px;
+}
+
+.formGroup {
+  margin: 10px 10px;
+  width: 300px;
+}
+
+.button {
+  margin-top: 10px;
+}
+
+.controlLabel {
+  margin-right: 5px;
+}
+
