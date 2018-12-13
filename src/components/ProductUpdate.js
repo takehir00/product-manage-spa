@@ -21,11 +21,13 @@ class ProductUpdate extends Component {
         const {id} = props.match.params;
         const {cookies} = props;
 
-        this.state = {id: id, title: "", image: "", price: "", introduction: "", token: cookies.get('token'), modalIsOpen: false};
+        this.state = {id: id, title: "", image: "", price: "", introduction: "", token: cookies.get('token'), modalIsOpen: false, errorMessage: '', errorMessages:[]};
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.setErrorMessage = this.setErrorMessage.bind(this);
+        this.setErrorMessages = this.setErrorMessages.bind(this);
+        this.errorMessageList = this.errorMessageList.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeImage = this.onChangeImage.bind(this);
@@ -62,6 +64,17 @@ class ProductUpdate extends Component {
 
     setErrorMessage(error) {
         this.setState({errorMessage: error})
+    }
+
+    setErrorMessages(errorMessages) {
+        this.setState({errorMessages: errorMessages});
+    }
+
+    errorMessageList(){
+        return this.state.errorMessages.map(
+            (message, i) =>
+                <div key={i}>{message}</div>
+        )
     }
 
     onChangeTitle(e) {
@@ -106,8 +119,17 @@ class ProductUpdate extends Component {
                 this.props.history.push('/products')
             })
             .catch(error => {
-                this.openModal();
-                this.setErrorMessage(error.message);
+                if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.statusText);
+                        console.log(error.response.headers);
+                    this.setErrorMessages(error.response.data['errormessage']);
+                    this.openModal();
+                } else {
+                    this.setErrorMessage(error.message);
+                    this.openModal();
+                }
             })
     }
 
@@ -121,7 +143,8 @@ class ProductUpdate extends Component {
                     style={customStyles}
                     contentLabel="Error Modal"
                 >
-                    <h1>{this.state.errorMessage}</h1>
+                    <div>{this.errorMessageList()}</div>
+                    <div>{this.state.errorMessage}</div>
                     <button onClick={this.closeModal}>close</button>
                 </Modal>
                 <div>商品更新フォーム</div>

@@ -23,11 +23,13 @@ class ProductDelete extends Component {
 
         const {id} = props.match.params;
         const {cookies} = props;
-        this.state = {id: id, token: cookies.get('token'), modalIsOpen: false, errorMessage: ''};
+        this.state = {id: id, token: cookies.get('token'), modalIsOpen: false, errorMessage: '', errorMessages:[]};
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.setErrorMessage = this.setErrorMessage.bind(this);
+        this.setErrorMessages = this.setErrorMessages.bind(this);
+        this.errorMessageList = this.errorMessageList.bind(this);
     }
 
     openModal() {
@@ -40,6 +42,17 @@ class ProductDelete extends Component {
 
     setErrorMessage(error) {
         this.setState({errorMessage: error})
+    }
+
+    setErrorMessages(errorMessages) {
+        this.setState({errorMessages: errorMessages});
+    }
+
+    errorMessageList(){
+        return this.state.errorMessages.map(
+            (message, i) =>
+                <div key={i}>{message}</div>
+        )
     }
 
     onProductDelete(e) {
@@ -56,8 +69,14 @@ class ProductDelete extends Component {
                 this.props.history.push('/products')
             })
             .catch(error => {
-                this.openModal();
-                console.log('** error **', error)
+                if (error.response) {
+                    this.setErrorMessages(error.response.data['errormessage']);
+                    this.openModal()
+                } else {
+                    this.setErrorMessage(error.message);
+                    this.openModal();
+                }
+
             })
     }
 
@@ -70,8 +89,9 @@ class ProductDelete extends Component {
                     style={customStyles}
                     contentLabel="Error Modal"
                 >
-                <h1>{this.state.errorMessage}</h1>
-                <button onClick={this.closeModal}>close</button>
+                    <div>{this.errorMessageList()}</div>
+                    <div>{this.state.errorMessage}</div>
+                    <button onClick={this.closeModal}>close</button>
                 </Modal>
                 <div>削除しますか？</div>
                 <Button onClick={(event) => this.onProductDelete(event)}>削除</Button>

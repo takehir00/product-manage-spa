@@ -97,7 +97,7 @@ class ProductsIndex extends Component {
                     style={customStyles}
                     contentLabel="Error Modal"
                 >
-                    <h1>{this.state.errorMessage}</h1>
+                    <div>{this.state.errorMessage}</div>
                     <button onClick={this.closeModal}>close</button>
                 </Modal>
                 <div className="title">商品の作成・検索・更新・削除機能を持ったSPA</div>
