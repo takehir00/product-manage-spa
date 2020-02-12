@@ -1,4 +1,4 @@
-# restful-api-frontApp
+# product-api-frontApp
 
 ## アプリケーションの概要
 商品情報の検索・登録・更新・削除を行うresutfulAPIを利用した商品管理SPA
